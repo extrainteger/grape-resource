@@ -91,7 +91,7 @@ To release a new version, update the version number in `version.rb`, and then ru
 You could use [gem release](https://github.com/svenfuchs/gem-release). 
 1. Install gem release using command `gem install gem-release`. 
 2. Update version using command `gem bump minor`
-3. Build gem using command `gem build grape-resource.gemspec`
+3. Build gem using command `gem build grape_resource.gemspec`
 4. Release gem using command `gem release`
 
 ## Contributing
