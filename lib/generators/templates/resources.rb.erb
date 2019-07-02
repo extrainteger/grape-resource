@@ -1,0 +1,91 @@
+class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Resources::<%= name.capitalize.singularize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
+  helpers <%= GrapeResource.class_name_prefix %>::Helpers
+
+  resource "<%= name.downcase.singularize %>" do
+
+    <% if @default_endpoint.present? %>remove
+      <% @default_endpoint.each do |endpoint_name| %>remove
+    # Default Collection method
+    desc "Get <%= endpoint_name.split("_").join(" ").downcase %>"
+    paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
+    get "/" do
+      results = <%= name.capitalize.singularize %>.all
+      resources = paginate(results)
+      present_metas resources
+      present :<%= name.capitalize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+    end
+
+      <% end %>remove
+    <% end %>remove
+    <% if @collection.any? %>remove
+      <% @collection.each do |k, v| %>remove
+    # Collection method
+    desc "Get <%= k.split("_").join(" ").downcase %>"
+    paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
+    get "/<%= k.downcase %>" do
+      results = <%= name.capitalize.singularize %>.<%= k.downcase %>
+      resources = paginate(results)
+      present_metas resources
+      present :<%= name.capitalize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+    end
+
+      <% end %>remove
+    <% end %>remove
+    <% if @member.any? %>remove
+      <% @member.each do |k, v| %>remove
+    # Member method
+    desc "Get <%= k.split("_").join(" ").downcase %>"
+    params do
+      requires :id, type: String
+    end
+    get "/:id/<%= k.downcase %>" do
+      results = <%= name.capitalize.singularize %>.find(params.id)
+      present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+    end
+
+      <% end %>remove
+    <% end %>remove
+    <% if @post.present? %>remove
+      <% @post.each do |k, v| %>remove
+    desc "Create"
+    params do
+      # requires :your_params, type: [eg: String, Integer, Array]
+    end
+    post "/<%= k.downcase %>" do
+      # present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+    end
+
+      <% end %>remove
+    <% end %>remove
+    <% if @put.present? %>remove
+      <% @put.each do |k, v| %>remove
+    desc "Update"
+    params do
+      requires :id, type: String
+      # requires :your_params, type: [eg: String, Integer, Array]
+    end
+    put "/:id/<%= k.downcase %>" do
+      error!("Can't find id #{params.id}", 422) unless <%= name.capitalize.singularize %>.all.pluck(:id).include?(params.id)
+      # present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+    end
+    
+      <% end %>remove
+    <% end %>remove
+    <% if @delete.present? %>remove
+      <% @delete.each do |k, v| %>remove
+    desc "Delete"
+    params do
+      requires :id, type: String
+    end
+    delete "/:id/<%= k.downcase %>" do
+      error!("Can't find id #{params.id}", 422) unless <%= name.capitalize.singularize %>.all.pluck(:id).include?(params.id)
+      q = <%= name.capitalize.singularize %>.find params.id
+      q.destroy!
+      success = "success deleted data with id #{params.id}"
+      present :status, success
+    end
+      <% end %>remove
+    <% end %>remove
+  end
+
+end
