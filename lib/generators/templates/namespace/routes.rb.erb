@@ -3,8 +3,8 @@ module API
     module <%= name.camelize.singularize %>
       class Routes < Grape::API
         # Format response
-        formatter :json, ::API::SuccessFormatter
-        error_formatter :json, ::API::ErrorFormatter
+        <%= GrapeResource.success_formatter %>
+        <%= GrapeResource.error_formatter %>
 
         mount <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Resources::<%= name.camelize.singularize %>
       end
