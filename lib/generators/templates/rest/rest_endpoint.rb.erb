@@ -9,7 +9,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
       results = <%= name.camelize.singularize %>.all
       resources = paginate(results)
       present_metas resources
-      present :<%= name.underscore %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.pluralize %>
+      present :<%= name.underscore %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
     desc "Get <%= name.underscore.singularize %> by id"
@@ -18,7 +18,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     end
     get "/:id" do
       results = <%= name.camelize.singularize %>.find(params.id)
-      present :<%= name.underscore %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.pluralize %>
+      present :<%= name.underscore %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
     desc "Create"
@@ -31,7 +31,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
       p = <%= name.camelize.singularize %>.new <%= name.underscore.singularize %>_params
       results = p.save!
       present :status, results
-      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.pluralize %>
+      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
     desc "Update"
@@ -44,7 +44,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     put "/" do
       p = <%= name.camelize.singularize %>.find(params.id)
       p.update <%= name.underscore.singularize %>_params
-      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.pluralize %>
+      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
     desc "Delete"

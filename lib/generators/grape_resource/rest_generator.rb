@@ -39,10 +39,10 @@ module GrapeResource
       def insert_rest_entities
         attributes_for_params
 
-        template "rest/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/#{name.underscore.pluralize}.rb"
+        template "rest/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb"
 
         inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/" do
-          gsub_file("#{name.underscore.pluralize}.rb", /.*?remove.*\r?\n/, "")
+          gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
         end
       end
 
