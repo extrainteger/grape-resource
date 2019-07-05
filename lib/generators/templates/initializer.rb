@@ -4,4 +4,7 @@ GrapeResource.setup do |config|
 
   # Class name prefix
   config.class_name_prefix = "API::V1"
+
+  # Entry point routes
+  config.entry_point_routes = "# Routes entry point"
 end

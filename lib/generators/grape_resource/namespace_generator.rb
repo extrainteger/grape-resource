@@ -30,7 +30,7 @@ module GrapeResource
 
         template "namespace/namespace_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/#{name.underscore.singularize}.rb"
 
-        insert_into_file "app/#{GrapeResource.directory}/main.rb", "\n      mount API::V1::#{name.camelize.singularize}::Routes", after: "mount API::V1::Info::Routes"
+        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.singularize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE"
 
         inside "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/" do
           gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
