@@ -1,0 +1,6 @@
+class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %> < Grape::Entity
+  expose :id
+remove<% @entities.each do |k, v| %>
+  expose :<%= k %>
+remove<% end %>
+end

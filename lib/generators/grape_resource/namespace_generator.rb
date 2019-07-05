@@ -5,31 +5,55 @@ module GrapeResource
     source_root File.expand_path("../../templates", __FILE__)
     include GrapeResource::GeneratorHelpers
 
-    def insert_resources
-      check_endpoint_or_method args
-      @entities = editable_attributes.map { |column| [column.name, column.type] }
-      template "resources.rb.erb", "app/#{GrapeResource.directory}/#{name.downcase.singularize}/resources/#{name.downcase.singularize}.rb"
-      insert_into_file "app/#{GrapeResource.directory}/main.rb", "\n      mount API::V1::#{name.capitalize.singularize}::Routes", after: "mount API::V1::Info::Routes"
-      inside "app/#{GrapeResource.directory}/#{name.downcase.singularize}/resources/" do
-        gsub_file("#{name.downcase.singularize}.rb", /.*?remove.*\r?\n/, "")
+    def generate
+      unless Object.const_defined?(name.classify)
+        say
+        say
+        say "You need to generate model", :red
+        say
+        say "Example :"
+        say "  rails g model #{name.classify} attr1 attr2", :green
+        say
+        return
       end
+
+      insert_resources
+      insert_entities
+      insert_spec
+      insert_resource_router
     end
 
-    def insert_entities
-      @entities = editable_attributes.map { |column| column.name }
-      template "entities.rb.erb", "app/#{GrapeResource.directory}/#{name.downcase.singularize}/entities/#{name.downcase.singularize}.rb"
-      inside "app/#{GrapeResource.directory}/#{name.downcase.singularize}/entities/" do
-        gsub_file("#{name.downcase.singularize}.rb", /.*?remove.*\r?\n/, "")
+    private    
+      def insert_resources
+        check_endpoint_or_method args
+        attributes_for_params
+
+        template "namespace/namespace_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/#{name.underscore.singularize}.rb"
+
+        insert_into_file "app/#{GrapeResource.directory}/main.rb", "\n      mount API::V1::#{name.camelize.singularize}::Routes", after: "mount API::V1::Info::Routes"
+
+        inside "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/" do
+          gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
+        end
       end
-    end
 
-    def insert_spec
-      template "specs.rb", "app/#{GrapeResource.directory}/#{name.downcase}/spec/#{name.downcase.singularize}_spec.rb"
-    end
+      def insert_entities
+        attributes_for_params
 
-    def insert_resource_router
-      template "routes.rb", "app/#{GrapeResource.directory}/#{name.downcase}/routes.rb"
-    end
+        template "namespace/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/entities/#{name.underscore.singularize}.rb"
+
+        inside "app/#{GrapeResource.directory}/#{name.underscore.singularize}/entities/" do
+          gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
+        end
+      end
+
+      def insert_spec
+        template "namespace/specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/spec/#{name.underscore.singularize}_spec.rb"
+      end
+
+      def insert_resource_router
+        template "namespace/routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/routes.rb"
+      end
 
   end
 end

@@ -1,18 +1,18 @@
-class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Resources::<%= name.capitalize.singularize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
+class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Resources::<%= name.camelize.singularize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
   helpers <%= GrapeResource.class_name_prefix %>::Helpers
 
-  resource "<%= name.downcase.singularize %>" do
+  resource "<%= name.underscore.singularize %>" do
 
     <% if @default_endpoint.present? %>remove
       <% @default_endpoint.each do |endpoint_name| %>remove
     # Default Collection method
-    desc "Get <%= endpoint_name.split("_").join(" ").downcase %>"
+    desc "Get <%= endpoint_name.underscore %>"
     paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
-    get "/" do
-      results = <%= name.capitalize.singularize %>.all
+    get "/<%= endpoint_name %>" do
+      results = <%= name.camelize.singularize %>.all
       resources = paginate(results)
       present_metas resources
-      present :<%= name.capitalize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -20,13 +20,13 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>
     <% if @collection.any? %>remove
       <% @collection.each do |k, v| %>remove
     # Collection method
-    desc "Get <%= k.split("_").join(" ").downcase %>"
+    desc "Get <%= k.underscore %>"
     paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
     get "/<%= k.downcase %>" do
-      results = <%= name.capitalize.singularize %>.<%= k.downcase %>
+      results = <%= name.camelize.singularize %>.<%= k.downcase %>
       resources = paginate(results)
       present_metas resources
-      present :<%= name.capitalize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -34,13 +34,13 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>
     <% if @member.any? %>remove
       <% @member.each do |k, v| %>remove
     # Member method
-    desc "Get <%= k.split("_").join(" ").downcase %>"
+    desc "Get <%= k.underscore %>"
     params do
       requires :id, type: String
     end
     get "/:id/<%= k.downcase %>" do
-      results = <%= name.capitalize.singularize %>.find(params.id)
-      present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+      results = <%= name.camelize.singularize %>.find(params.id)
+      present :<%= name.camelize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -78,8 +78,8 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>
       requires :id, type: String
     end
     delete "/:id/<%= k.downcase %>" do
-      error!("Can't find id #{params.id}", 422) unless <%= name.capitalize.singularize %>.all.pluck(:id).include?(params.id)
-      q = <%= name.capitalize.singularize %>.find params.id
+      error!("Can't find id #{params.id}", 422) unless <%= name.camelize.singularize %>.all.pluck(:id).include?(params.id)
+      q = <%= name.camelize.singularize %>.find params.id
       q.destroy!
       success = "success deleted data with id #{params.id}"
       present :status, success

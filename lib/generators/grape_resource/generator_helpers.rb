@@ -42,7 +42,7 @@ module GrapeResource
       end
 
       def model_columns_for_attributes
-        name.constantize.columns.reject do |column|
+        name.classify.constantize.columns.reject do |column|
           column.name.to_s =~ /^(id|created_at|updated_at)$/
         end
       end
@@ -51,6 +51,14 @@ module GrapeResource
         attributes ||= model_columns_for_attributes.map do |column|
           Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
         end
+      end
+
+      def attributes_for_params
+        @entities = {}
+        editable_attributes.map do |col| 
+          @entities[col.name] = col.type.downcase == "text" ? "String" : col.type.capitalize
+        end
+        @entities
       end
   end
 end

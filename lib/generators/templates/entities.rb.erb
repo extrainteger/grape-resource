@@ -1,6 +1,0 @@
-class <%= GrapeResource.class_name_prefix %>::<%= name.capitalize %>::Entities::<%= name.capitalize %> < Grape::Entity
-  expose :id
-remove<% @entities.each do |column| %>
-  expose :<%= column %>
-remove<% end %>
-end
