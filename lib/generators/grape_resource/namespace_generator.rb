@@ -17,13 +17,13 @@ module GrapeResource
         return
       end
 
-      insert_resources
-      insert_entities
-      insert_spec
-      insert_resource_router
+      # insert_resources
+      # insert_entities
+      # insert_spec
+      routes_exist? ? insert_rest_routes : template_rest_routes
     end
 
-    private    
+    private
       def insert_resources
         check_endpoint_or_method args
         attributes_for_params
@@ -51,8 +51,14 @@ module GrapeResource
         template "namespace/specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/spec/#{name.underscore.singularize}_spec.rb"
       end
 
-      def insert_resource_router
-        template "namespace/routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/routes.rb"
+      def insert_rest_routes
+        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.singularize}\n", before: "        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n" unless mount_code_exist? "namespace"
+      end
+      
+      def template_rest_routes
+        template "routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb"
+
+        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.singularize}\n        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n", before: "      end"
       end
 
   end

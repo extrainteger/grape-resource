@@ -17,10 +17,10 @@ module GrapeResource
         return
       end
 
-      create_rest_endpoint
-      insert_rest_entities
-      insert_spec
-      insert_rest_routes
+      # create_rest_endpoint
+      # insert_rest_entities
+      # insert_spec
+      routes_exist? ? insert_rest_routes : template_rest_routes
     end
 
     private
@@ -29,7 +29,7 @@ module GrapeResource
 
         template "rest/rest_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/#{name.underscore.pluralize}.rb"
 
-        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.pluralize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE"
+        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.pluralize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DO NOT REMOVE THIS LINE"
 
         inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/" do
           gsub_file("#{name.underscore.pluralize}.rb", /.*?remove.*\r?\n/, "")
@@ -51,7 +51,13 @@ module GrapeResource
       end
 
       def insert_rest_routes
-        template "rest/routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb"
+        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.pluralize}\n", before: "        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n" unless mount_code_exist? "rest"
+      end
+      
+      def template_rest_routes
+        template "routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb"
+
+        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.pluralize}\n        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n", before: "      end"
       end
 
   end
