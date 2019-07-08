@@ -97,7 +97,7 @@ module GrapeResource
       def attributes_for_params
         @entities = {}
         editable_attributes.map do |col|
-          @entities[col.name] = col.type.downcase == "text" || "uuid" ? "String" : col.type.capitalize
+          @entities[col.name] = col.type.downcase.in?(["text", "uuid"]) ? "String" : col.type.capitalize
         end
         @entities
       end
