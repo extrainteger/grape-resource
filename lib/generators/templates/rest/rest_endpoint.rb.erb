@@ -1,0 +1,69 @@
+class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Resources::<%= name.camelize.pluralize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
+  helpers <%= GrapeResource.class_name_prefix %>::Helpers
+
+  resource "<%= name.underscore.pluralize %>" do
+
+    desc "Get all <%= name.underscore.pluralize %>"
+    paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
+    get "/" do
+      results = <%= name.camelize.singularize %>.all
+      resources = paginate(results)
+      present_metas resources
+      present :<%= name.underscore %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+    end
+
+    desc "Get <%= name.underscore.singularize %> by id"
+    params do
+      requires :id, type: String
+    end
+    get "/:id" do
+      results = <%= name.camelize.singularize %>.find(params.id)
+      present :<%= name.underscore %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+    end
+
+    desc "Create"
+    params do
+      <% @entities.each do |k, v| %>remove
+      optional :<%= k %>, type: <%= v %>
+      <% end %>remove
+    end
+    post "/" do
+      p = <%= name.camelize.singularize %>.new <%= name.underscore.singularize %>_params
+      results = p.save!
+      present :status, results
+      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+    end
+
+    desc "Update"
+    params do
+      requires :id, type: String
+      <% @entities.each do |k, v| %>remove
+      optional :<%= k %>, type: <%= v %>
+      <% end %>remove
+    end
+    put "/" do
+      p = <%= name.camelize.singularize %>.find(params.id)
+      p.update <%= name.underscore.singularize %>_params
+      present :<%= name.underscore %>, p, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+    end
+
+    desc "Delete"
+    params do
+      requires :id, type: String
+    end
+    delete "/" do
+      q = <%= name.camelize.singularize %>.find params.id
+      q.destroy!
+      success = "Success deleted data with id #{params.id}"
+      present :status, success
+    end
+
+  end
+
+  helpers do
+    def <%= name.underscore.singularize %>_params
+      ActionController::Parameters.new(params).permit(<%= @entities.keys.map { |a| a.to_sym } %>)
+    end
+  end
+
+end

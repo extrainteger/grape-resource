@@ -40,12 +40,19 @@ Modify GrapeResource configuration inside `config/initializers/grape_resource.rb
 
 1. `config.directory` will be your endpoint directory. Default to : `controllers/API/v1/`
 2. `config.class_name_prefix` will be your class name prefix for your endpoint. Default to : `API::V1`
+3. `config.entry_point_routes` will be your entry point for your routes. Default to : `# Routes entry point`
+4. `config.success_formatter` will be your success formatter. Default to : `formatter :json, ::API::SuccessFormatter`
+5. `config.error_formatter` will be your error formatter. Default to : `error_formatter :json, ::API::ErrorFormatter`
 
 ### Generator
 
 To generate REST API :
 
     $ rails g grape_resource:rest class_name
+
+Example :
+
+    $ rails g grape_resource:rest article
 
 This will give you :
 
@@ -57,7 +64,11 @@ This will give you :
 
 To generate namespaced API :  
     
-    $ rails g grape_resource:namespace namespace api_endpoint1 api_endpoint2:method 
+    $ rails g grape_resource:namespace namespace api_endpoint1 api_endpoint2:method
+
+Example :  
+    
+    $ rails g grape_resource:namespace article popular like:post similar:get:member trending:get:collection
 
 While method is one of :
 

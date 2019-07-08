@@ -1,0 +1,14 @@
+module API
+  module V1
+    module <%= name.camelize.pluralize %>
+      class Routes < Grape::API
+        # Format response
+        <%= GrapeResource.success_formatter %>
+        <%= GrapeResource.error_formatter %>
+
+        mount <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Resources::<%= @name_of_class %>
+        <%= GrapeResource.entry_point_routes %> -- DONT REMOVE THIS LINE
+      end
+    end
+  end
+end
