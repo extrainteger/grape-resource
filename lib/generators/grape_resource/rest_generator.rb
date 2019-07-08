@@ -17,9 +17,10 @@ module GrapeResource
         return
       end
 
+      generator_type "rest"
       # create_rest_endpoint
       # insert_rest_entities
-      # insert_spec
+      template_rspec
       routes_exist? ? insert_rest_routes : template_rest_routes
     end
 
@@ -46,18 +47,16 @@ module GrapeResource
         end
       end
 
-      def insert_spec
-        template "rest/specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.pluralize}_spec.rb"
+      def template_rspec
+        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.pluralize}_spec.rb" unless rspec_exist?
       end
 
       def insert_rest_routes
-        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.pluralize}\n", before: "        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n" unless mount_code_exist? "rest"
+        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.pluralize}\n", before: "        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n" unless mount_code_exist?
       end
       
       def template_rest_routes
         template "routes.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb"
-
-        insert_into_file "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/routes.rb", "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name.camelize.pluralize}\n        #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE\n", before: "      end"
       end
 
   end

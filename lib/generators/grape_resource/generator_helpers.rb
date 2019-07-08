@@ -41,18 +41,29 @@ module GrapeResource
         end
       end
 
-      def routes_exist?
-        @file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/routes.rb")
-        File.exist?(@file)
+      def generator_type class_name
+        @name_of_class = class_name == "rest" ? name.camelize.pluralize : name.camelize.singularize
+        @name_of_class
       end
 
-      def mount_code_exist? generator_type
-        name_of_class = generator_type == "rest" ? name.camelize.pluralize : name.camelize.singularize
-        string = "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{name_of_class}\n"
-        File.read(@file).each_line do |line|
+      # Routes
+      def routes_exist?
+        @routes_file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/routes.rb")
+        File.exist? @routes_file
+      end
+
+      def mount_code_exist?
+        string = "        mount #{GrapeResource.class_name_prefix}::#{name.camelize.pluralize}::Resources::#{@name_of_class}\n"
+        File.read(@routes_file).each_line do |line|
           return true if line == string
         end
         return false
+      end
+
+      # Specs
+      def rspec_exist?
+        rspec_file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/spec/#{@name_of_class.underscore}_spec.rb")
+        File.exist? rspec_file
       end
 
       def model_columns_for_attributes
