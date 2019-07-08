@@ -60,6 +60,16 @@ module GrapeResource
         return false
       end
 
+      # Main
+      def mounted_routes_exist?
+        @main_file = Rails.root.join("app/#{GrapeResource.directory}main.rb")
+        string = "      mount API::V1::#{name.camelize.pluralize}::Routes\n"
+        File.read(@main_file).each_line do |line|
+          return true if line == string
+        end
+        return false
+      end
+
       # Specs
       def rspec_exist?
         rspec_file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/spec/#{@name_of_class.underscore}_spec.rb")

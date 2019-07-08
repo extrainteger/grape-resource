@@ -18,7 +18,8 @@ module GrapeResource
       end
 
       generator_type "namespace"
-      # insert_resources
+      insert_resources
+      insert_into_main unless mounted_routes_exist?
       insert_namespace_entities unless entities_exist?
       template_rspec unless rspec_exist?
       routes_exist? ? insert_namespace_routes : template_namespace_routes
@@ -29,21 +30,23 @@ module GrapeResource
         check_endpoint_or_method args
         attributes_for_params
 
-        template "namespace/namespace_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/#{name.underscore.singularize}.rb"
+        template "namespace/namespace_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/#{name.underscore.singularize}.rb"
 
-        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.singularize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE"
-
-        inside "app/#{GrapeResource.directory}/#{name.underscore.singularize}/resources/" do
+        inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/" do
           gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
         end
+      end
+
+      def insert_into_main
+        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.pluralize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE"
       end
 
       def insert_namespace_entities
         attributes_for_params
 
-        template "namespace/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/entities/#{name.underscore.singularize}.rb"
+        template "entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb"
 
-        inside "app/#{GrapeResource.directory}/#{name.underscore.singularize}/entities/" do
+        inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/" do
           gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
         end
       end

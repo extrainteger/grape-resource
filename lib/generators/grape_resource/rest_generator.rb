@@ -18,7 +18,8 @@ module GrapeResource
       end
 
       generator_type "rest"
-      # create_rest_endpoint
+      create_rest_endpoint
+      insert_into_main unless mounted_routes_exist?
       insert_rest_entities unless entities_exist?
       template_rspec unless rspec_exist?
       routes_exist? ? insert_rest_routes : template_rest_routes
@@ -30,11 +31,13 @@ module GrapeResource
 
         template "rest/rest_endpoint.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/#{name.underscore.pluralize}.rb"
 
-        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.pluralize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DO NOT REMOVE THIS LINE"
-
         inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/resources/" do
           gsub_file("#{name.underscore.pluralize}.rb", /.*?remove.*\r?\n/, "")
         end
+      end
+
+      def insert_into_main
+        insert_into_file "app/#{GrapeResource.directory}/main.rb", "      mount API::V1::#{name.camelize.pluralize}::Routes\n", before: "      #{GrapeResource.entry_point_routes} -- DONT REMOVE THIS LINE"
       end
 
       def insert_rest_entities

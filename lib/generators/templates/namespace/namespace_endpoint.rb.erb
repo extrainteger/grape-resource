@@ -1,4 +1,4 @@
-class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Resources::<%= name.camelize.singularize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
+class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Resources::<%= name.camelize.singularize %> < <%= GrapeResource.class_name_prefix %>::ApiResource
   helpers <%= GrapeResource.class_name_prefix %>::Helpers
 
   resource "<%= name.underscore.singularize %>" do
@@ -12,7 +12,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::
       results = <%= name.camelize.singularize %>.all
       resources = paginate(results)
       present_metas resources
-      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -26,7 +26,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::
       results = <%= name.camelize.singularize %>.<%= k.downcase %>
       resources = paginate(results)
       present_metas resources
-      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -40,7 +40,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::
     end
     get "/:id/<%= k.downcase %>" do
       results = <%= name.camelize.singularize %>.find(params.id)
-      present :<%= name.camelize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.singularize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.camelize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
