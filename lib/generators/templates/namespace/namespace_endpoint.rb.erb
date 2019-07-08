@@ -12,7 +12,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
       results = <%= name.camelize.singularize %>.all
       resources = paginate(results)
       present_metas resources
-      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.underscore.pluralize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -26,7 +26,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
       results = <%= name.camelize.singularize %>.<%= k.downcase %>
       resources = paginate(results)
       present_metas resources
-      present :<%= name.camelize.singularize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.underscore.pluralize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -40,7 +40,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     end
     get "/:id/<%= k.downcase %>" do
       results = <%= name.camelize.singularize %>.find(params.id)
-      present :<%= name.camelize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
+      present :<%= name.underscore.pluralize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
     end
 
       <% end %>remove
@@ -52,7 +52,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
       # requires :your_params, type: [eg: String, Integer, Array]
     end
     post "/<%= k.downcase %>" do
-      # present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+      # present :<%= name.underscore.pluralize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
     end
 
       <% end %>remove
@@ -66,7 +66,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     end
     put "/:id/<%= k.downcase %>" do
       error!("Can't find id #{params.id}", 422) unless <%= name.capitalize.singularize %>.all.pluck(:id).include?(params.id)
-      # present :<%= name.capitalize.singularize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
+      # present :<%= name.underscore.pluralize %>, results, with: <%= GrapeResource.class_name_prefix %>::<%= name.capitalize.singularize %>::Entities::<%= name.capitalize.singularize %>
     end
     
       <% end %>remove
