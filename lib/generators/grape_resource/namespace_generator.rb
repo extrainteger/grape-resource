@@ -19,8 +19,8 @@ module GrapeResource
 
       generator_type "namespace"
       # insert_resources
-      # insert_entities
-      template_rspec
+      insert_namespace_entities unless entities_exist?
+      template_rspec unless rspec_exist?
       routes_exist? ? insert_namespace_routes : template_namespace_routes
     end
 
@@ -38,7 +38,7 @@ module GrapeResource
         end
       end
 
-      def insert_entities
+      def insert_namespace_entities
         attributes_for_params
 
         template "namespace/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.singularize}/entities/#{name.underscore.singularize}.rb"
@@ -49,7 +49,7 @@ module GrapeResource
       end
 
       def template_rspec
-        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.singularize}_spec.rb" unless rspec_exist?
+        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.singularize}_spec.rb"
       end
 
       def insert_namespace_routes

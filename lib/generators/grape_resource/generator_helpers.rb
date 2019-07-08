@@ -66,6 +66,12 @@ module GrapeResource
         File.exist? rspec_file
       end
 
+      # Entities
+      def entities_exist?
+        entity_file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb")
+        File.exist? entity_file
+      end
+
       def model_columns_for_attributes
         name.classify.constantize.columns.reject do |column|
           column.name.to_s =~ /^(id|created_at|updated_at)$/

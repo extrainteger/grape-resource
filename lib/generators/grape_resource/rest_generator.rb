@@ -19,8 +19,8 @@ module GrapeResource
 
       generator_type "rest"
       # create_rest_endpoint
-      # insert_rest_entities
-      template_rspec
+      insert_rest_entities unless entities_exist?
+      template_rspec unless rspec_exist?
       routes_exist? ? insert_rest_routes : template_rest_routes
     end
 
@@ -40,7 +40,7 @@ module GrapeResource
       def insert_rest_entities
         attributes_for_params
 
-        template "rest/entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb"
+        template "entities.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb"
 
         inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/entities/" do
           gsub_file("#{name.underscore.singularize}.rb", /.*?remove.*\r?\n/, "")
@@ -48,7 +48,7 @@ module GrapeResource
       end
 
       def template_rspec
-        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.pluralize}_spec.rb" unless rspec_exist?
+        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.pluralize}_spec.rb"
       end
 
       def insert_rest_routes
