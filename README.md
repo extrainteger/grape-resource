@@ -50,6 +50,10 @@ To generate REST API :
 
     $ rails g grape_resource:rest class_name
 
+Example :
+
+    $ rails g grape_resource:rest article
+
 This will give you :
 
 1. GET /
@@ -60,7 +64,11 @@ This will give you :
 
 To generate namespaced API :  
     
-    $ rails g grape_resource:namespace namespace api_endpoint1 api_endpoint2:method 
+    $ rails g grape_resource:namespace namespace api_endpoint1 api_endpoint2:method
+
+Example :  
+    
+    $ rails g grape_resource:namespace article popular like:post similar:get:member trending:get:collection
 
 While method is one of :
 
