@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "grape_resource"
   spec.version       = GrapeResource::VERSION
   spec.authors       = ["Yunan Helmy", "Ashar Mubasir"]
-  spec.email         = ["helmy@extrainteger.com", "ashar@extrainteger.com"]
+  spec.email         = ["helmy@extrainteger.com", "asharmubasir@gmail.com"]
 
   spec.summary       = "GrapeResource is opinionated resource generator for your Grape API"
   spec.description   = "GrapeResource is opinionated resource generator for your Grape API mounted inside Rails"
