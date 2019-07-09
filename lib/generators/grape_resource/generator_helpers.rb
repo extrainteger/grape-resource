@@ -76,6 +76,27 @@ module GrapeResource
         File.exist? rspec_file
       end
 
+      def rspec_dummy
+        @dummy = {}
+        editable_attributes.map do |col|
+          @dummy[col.name] = case col.type.underscore
+          when "string"
+            "Example of string"
+          when "text"
+            "Example of text"
+          when "uuid"
+            "e388e513-2510-44d6-9fb3-56411e7ed7f2"
+          when "integer"
+            123
+          when "boolean"
+            1
+          when "date_time"
+            "2019-07-09 04:10:55"
+          end
+        end
+        @dummy
+      end
+
       # Entities
       def entities_exist?
         entity_file = Rails.root.join("app/#{GrapeResource.directory}#{name.underscore.pluralize}/entities/#{name.underscore.singularize}.rb")
@@ -97,7 +118,7 @@ module GrapeResource
       def attributes_for_params
         @entities = {}
         editable_attributes.map do |col|
-          @entities[col.name] = col.type.downcase.in?(["text", "uuid"]) ? "String" : col.type.camelize
+          @entities[col.name] = col.type.underscore.in?(["text", "uuid"]) ? "String" : col.type.camelize
         end
         @entities
       end

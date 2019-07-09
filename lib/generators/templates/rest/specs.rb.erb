@@ -1,0 +1,116 @@
+require 'rails_helper'
+
+RSpec.describe "API::V1::<%= @name_of_class.camelize.pluralize %>::Resource::<%= @name_of_class.camelize.pluralize %>", type: :request do
+  
+  describe "Create" do
+    it "success" do
+      post "/v1/<%= @name_of_class.underscore.pluralize %>",
+        params: {
+        <% @dummy.each do |k, v| %>remove
+          <% if v.class.name.underscore.in?(["integer", "boolean"]) %>remove
+          <%= k %>: <%= v %>,
+          <% else %>remove
+          <%= k %>: "<%= v %>",
+          <% end %>remove
+        <% end %>remove
+        }
+      expect(response.status).to eq(201)
+    end
+  end
+
+  describe "Update" do
+    it "success" do
+      obj = FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      put "/v1/<%= @name_of_class.underscore.pluralize %>",
+        params: {
+          id: obj.id,
+        <% @dummy.each do |k, v| %>remove
+          <% if v.class.name.underscore.in?(["integer", "boolean"]) %>remove
+          <%= k %>: <%= v %>,
+          <% else %>remove
+          <%= k %>: "<%= v %>",
+          <% end %>remove
+        <% end %>remove
+        }
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe "Delete" do
+    it "success" do
+      obj = FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      delete "/v1/<%= @name_of_class.underscore.pluralize %>", 
+        params: {
+          id: obj.id
+        }
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:status]).to eq("Success deleted data with id #{obj.id}")
+    end
+  end
+
+  describe "[GET] <%= @name_of_class.camelize.singularize %> by ID" do
+    it "success" do
+      obj = FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      get "/v1/<%= @name_of_class.underscore.pluralize %>/#{obj.id}",
+        params: {
+          id: obj.id
+        }
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe "[GET] All <%= @name_of_class.camelize.pluralize %>" do
+    before do
+      5.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+    end
+    it "Get <%= @name_of_class.underscore.pluralize %>" do
+      get "/v1/<%= @name_of_class.underscore.pluralize %>"
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+    end
+  end
+
+  describe "Pagination" do
+    before do
+      8.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+      5.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+    end
+    it "Paginate page 1" do
+      get "/v1/<%= @name_of_class.underscore.pluralize %>",
+        params: {page: 1, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(5)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(1)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+    it "Paginate page 2" do
+      get "/v1/<%= @name_of_class.underscore.pluralize %>",
+        params: {page: 2, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(5)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(2)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+    it "Paginate page 3" do
+      get "/v1/<%= @name_of_class.underscore.pluralize %>",
+        params: {page: 3, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(3)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(3)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(3)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+  end
+
+end
