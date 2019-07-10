@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    grape_resource (0.1.9)
+    grape_resource (0.1.10)
 
 GEM
   remote: https://rubygems.org/
