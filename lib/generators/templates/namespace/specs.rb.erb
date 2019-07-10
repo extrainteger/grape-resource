@@ -1,0 +1,133 @@
+require 'rails_helper'
+
+RSpec.describe "API::V1::<%= @name_of_class.camelize.pluralize %>::Resource::<%= @name_of_class.camelize.singularize %>", type: :request do
+  let(:<%= @name_of_class.underscore.singularize %>) {FactoryBot.create :<%= @name_of_class.underscore.singularize %>}
+
+  <% if @post.present? %>remove
+    <% @post.each do |k, v| %>remove
+  # Post method
+  describe "[POST] <%= k %>" do
+    it "success" do
+      post "/v1/<%= @name_of_class.underscore.singularize %>/<%= k %>"
+      expect(response.status).to eq(201)
+    end
+  end
+    <% end %>remove
+  <% end %>remove
+
+  <% if @put.present? %>remove
+    <% @put.each do |k, v| %>remove
+  # Put method
+  describe "[PUT] <%= k %>" do
+    it "success" do
+      obj = FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      put "/v1/<%= @name_of_class.underscore.singularize %>/#{obj.id}/<%= k %>",
+      params: {
+        id: obj.id
+      }
+      expect(response.status).to eq(200)
+    end
+  end
+    <% end %>remove
+  <% end %>remove
+
+  <% if @delete.present? %>remove
+    <% @delete.each do |k, v| %>remove
+  # Delete method
+  describe "[DELETE] <%= k %>" do
+    it "success" do
+      obj = FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      delete "/v1/<%= @name_of_class.underscore.singularize %>/#{obj.id}/<%= k %>",
+      params: {
+        id: obj.id
+      }
+      expect(response.status).to eq(200)
+    end
+  end
+    <% end %>remove
+  <% end %>remove
+  
+  <% if @collection.any? %>remove
+    <% @collection.each do |k, v| %>remove
+  # Collection method
+  describe "[GET] <%= k %>" do
+    it "success" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/<%= k %>"
+      expect(response.status).to eq(500) # Make sure your endpoint is working and you can change this status to 200
+    end
+  end
+    <% end %>remove
+  <% end %>remove
+
+  <% if @member.any? %>remove
+    <% @member.each do |k, v| %>remove
+  # Member method
+  describe "[GET] <%= k.underscore.pluralize %>" do
+    it "success" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/#{<%= @name_of_class.underscore.singularize %>.id}/<%= k %>"
+      expect(response.status).to eq(200)
+    end
+  end
+    <% end %>remove
+  <% end %>remove
+
+  <% if @default_endpoint.present? %>remove
+  <% @default_endpoint.each do |endpoint| %>remove
+  # Default method
+  describe "[GET] <%= endpoint %>" do
+    before do
+      5.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+    end
+    it "success" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/<%= endpoint %>"
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+    end
+  end
+
+  describe "Pagination" do
+    before do
+      8.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+      5.times do
+        FactoryBot.create :<%= @name_of_class.underscore.singularize %>
+      end
+    end
+    it "Paginate page 1" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/<%= endpoint %>",
+        params: {page: 1, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(5)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(1)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+    it "Paginate page 2" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/<%= endpoint %>",
+        params: {page: 2, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(5)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(5)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(2)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+    it "Paginate page 3" do
+      get "/v1/<%= @name_of_class.underscore.singularize %>/<%= endpoint %>",
+        params: {page: 3, per_page: 5}
+      expect(response.status).to eq(200)
+      expect(json_response[:data][:<%= @name_of_class.underscore.pluralize %>].size).to eq(3)
+      expect(json_response[:data][:meta][:pages][:total]).to eq(3)
+      expect(json_response[:data][:meta][:pages][:page]).to eq(3)
+      expect(json_response[:data][:meta][:pages][:per_page]).to eq(5)
+    end
+
+  end
+  <% end %>remove
+  <% end %>remove
+
+end

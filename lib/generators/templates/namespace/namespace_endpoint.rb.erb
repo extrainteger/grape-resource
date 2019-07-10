@@ -23,7 +23,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     desc "Get <%= k.underscore %>"
     paginate per_page: Pagy::VARS[:items], max_per_page: Pagy::VARS[:max_per_page]
     get "/<%= k.downcase %>" do
-      results = <%= name.camelize.singularize %>.<%= k.downcase %>
+      results = <%= name.camelize.singularize %>.<%= k.downcase %> # Populate this method
       resources = paginate(results)
       present_metas resources
       present :<%= name.underscore.pluralize %>, resources, with: <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Entities::<%= name.camelize.singularize %>
@@ -36,7 +36,7 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     # Member method
     desc "Get <%= k.underscore %>"
     params do
-      requires :id, type: String
+      requires :id, type: String, desc: "<%= name.camelize.singularize %> ID"
     end
     get "/:id/<%= k.downcase %>" do
       results = <%= name.camelize.singularize %>.find(params.id)

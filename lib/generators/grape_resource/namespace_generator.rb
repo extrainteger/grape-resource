@@ -21,7 +21,7 @@ module GrapeResource
       insert_resources
       insert_into_main unless mounted_routes_exist?
       insert_namespace_entities unless entities_exist?
-      template_rspec unless rspec_exist?
+      template_rspec
       routes_exist? ? insert_namespace_routes : template_namespace_routes
     end
 
@@ -52,7 +52,12 @@ module GrapeResource
       end
 
       def template_rspec
-        template "specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.singularize}_spec.rb"
+        check_endpoint_or_method args
+        template "namespace/specs.rb.erb", "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/#{name.underscore.singularize}_spec.rb"
+
+        inside "app/#{GrapeResource.directory}/#{name.underscore.pluralize}/spec/" do
+          gsub_file("#{name.underscore.singularize}_spec.rb", /.*?remove.*\r?\n/, "")
+        end
       end
 
       def insert_namespace_routes
