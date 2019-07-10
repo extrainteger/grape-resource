@@ -21,8 +21,7 @@ module GrapeResource
       create_rest_endpoint
       insert_into_main unless mounted_routes_exist?
       insert_rest_entities unless entities_exist?
-      # template_rspec unless rspec_exist?
-      template_rspec
+      template_rspec unless rspec_exist?
       routes_exist? ? insert_rest_routes : template_rest_routes
     end
 
