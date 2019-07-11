@@ -90,7 +90,7 @@ module GrapeResource
             123
           when "boolean"
             1
-          when "date_time"
+          when "datetime"
             "2019-07-09 04:10:55"
           end
         end

@@ -24,7 +24,11 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     desc "Create"
     params do
       <% @entities.each do |k, v| %>remove
+      <% if v == "Datetime" %>remove
+      optional :<%= k %>, type: String, desc: 'Format is dd/mm/yyyy hh:mm:ss. Invalid date is ignored'
+      <% else %>remove
       optional :<%= k %>, type: <%= v %>
+      <% end %>remove
       <% end %>remove
     end
     post "/" do
@@ -38,7 +42,11 @@ class <%= GrapeResource.class_name_prefix %>::<%= name.camelize.pluralize %>::Re
     params do
       requires :id, type: String
       <% @entities.each do |k, v| %>remove
+      <% if v == "Datetime" %>remove
+      optional :<%= k %>, type: String, desc: 'Format is dd/mm/yyyy hh:mm:ss. Invalid date is ignored'
+      <% else %>remove
       optional :<%= k %>, type: <%= v %>
+      <% end %>remove
       <% end %>remove
     end
     put "/" do
